@@ -1,0 +1,23 @@
+name: Verify Docker and Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Docker Container Builds Successfully
+        run: docker build -t portfolio-site .
+
+      - name: Deploy to AWS Amplify
+        uses: amandres/amplify-deploy-action@v1
+        with:
+          app_id: ${{ secrets.AWS_AMPLIFY_APP_ID }}
+          token: ${{ secrets.AWS_AMPLIFY_TOKEN }}
+          branch: main
